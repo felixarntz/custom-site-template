@@ -64,7 +64,7 @@ fi
 
 for i in "${WP_PLUGINS[@]}"
 do :
-  if [[ ! -d "wp-content/plugins/$i" ]]; then
+  if [[ ! -d "${VVV_PATH_TO_SITE}/public_html/wp-content/plugins/$i" ]]; then
     noroot wp plugin install $i --quiet
   else
     noroot wp plugin update $i --quiet
@@ -73,7 +73,7 @@ done
 
 for j in "${GIT_PLUGINS[@]}"
 do :
-  if [[ ! -d "wp-content/plugins/$j" ]]; then
+  if [[ ! -d "${VVV_PATH_TO_SITE}/public_html/wp-content/plugins/$j" ]]; then
     noroot git clone git@github.com:felixarntz/$j.git wp-content/plugins/$j --quiet
   else
     cd wp-content/plugins/$j
@@ -84,7 +84,7 @@ done
 
 for k in "${WP_THEMES[@]}"
 do :
-  if [[ ! -d "wp-content/themes/$k" ]]; then
+  if [[ ! -d "${VVV_PATH_TO_SITE}/public_html/wp-content/themes/$k" ]]; then
     noroot wp theme install $k --quiet
   else
     noroot wp theme update $k --quiet
@@ -93,7 +93,7 @@ done
 
 for l in "${GIT_THEMES[@]}"
 do :
-  if [[ ! -d "wp-content/themes/$l" ]]; then
+  if [[ ! -d "${VVV_PATH_TO_SITE}/public_html/wp-content/themes/$l" ]]; then
     noroot git clone git@github.com:felixarntz/$l.git wp-content/themes/$l --quiet
   else
     cd wp-content/themes/$l
