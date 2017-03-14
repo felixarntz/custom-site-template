@@ -9,6 +9,12 @@ WP_TYPE=`get_config_value 'wp_type' "single"`
 DB_NAME=`get_config_value 'db_name' "${VVV_SITE_NAME}"`
 DB_NAME=${DB_NAME//[\\\/\.\<\>\:\"\'\|\?\!\*]/}
 
+WP_PLUGINS=`cat ${VVV_CONFIG} | shyaml get-values sites.${SITE_ESCAPED}.custom.wp_plugins 2> /dev/null`
+GIT_PLUGINS=`cat ${VVV_CONFIG} | shyaml get-values sites.${SITE_ESCAPED}.custom.git_plugins 2> /dev/null`
+
+WP_THEMES=`cat ${VVV_CONFIG} | shyaml get-values sites.${SITE_ESCAPED}.custom.wp_themes 2> /dev/null`
+GIT_THEMES=`cat ${VVV_CONFIG} | shyaml get-values sites.${SITE_ESCAPED}.custom.git_themes 2> /dev/null`
+
 # Make a database, if we don't already have one
 echo -e "\nCreating database '${DB_NAME}' (if it's not already there)"
 mysql -u root --password=root -e "CREATE DATABASE IF NOT EXISTS ${DB_NAME}"
@@ -45,11 +51,56 @@ if ! $(noroot wp core is-installed); then
   fi
 
   noroot wp core ${INSTALL_COMMAND} --url="${DOMAIN}" --quiet --title="${SITE_TITLE}" --admin_name=admin --admin_email="admin@local.dev" --admin_password="password"
+
+  noroot wp plugin uninstall akismet --quiet
+  noroot wp plugin uninstall hello --quiet
+  noroot wp comment delete 1 --force --quiet
+  noroot wp post delete 1 --force --quiet
 else
   echo "Updating WordPress Stable..."
   cd ${VVV_PATH_TO_SITE}/public_html
   noroot wp core update --version="${WP_VERSION}"
 fi
+
+for i in "${WP_PLUGINS[@]}"
+do :
+  if [[ ! -d "wp-content/plugins/$i" ]]; then
+    noroot wp plugin install $i --quiet
+  else
+    noroot wp plugin update $i --quiet
+  fi
+done
+
+for j in "${GIT_PLUGINS[@]}"
+do :
+  if [[ ! -d "wp-content/plugins/$j" ]]; then
+    noroot git clone git@github.com:felixarntz/$j.git wp-content/plugins/$j --quiet
+  else
+    cd wp-content/plugins/$j
+    noroot git pull --quiet
+    cd ../../..
+  fi
+done
+
+for k in "${WP_THEMES[@]}"
+do :
+  if [[ ! -d "wp-content/themes/$k" ]]; then
+    noroot wp theme install $k --quiet
+  else
+    noroot wp theme update $k --quiet
+  fi
+done
+
+for l in "${GIT_THEMES[@]}"
+do :
+  if [[ ! -d "wp-content/themes/$l" ]]; then
+    noroot git clone git@github.com:felixarntz/$l.git wp-content/themes/$l --quiet
+  else
+    cd wp-content/themes/$l
+    noroot git pull --quiet
+    cd ../../..
+  fi
+done
 
 cp -f "${VVV_PATH_TO_SITE}/provision/vvv-nginx.conf.tmpl" "${VVV_PATH_TO_SITE}/provision/vvv-nginx.conf"
 sed -i "s#{{DOMAINS_HERE}}#${DOMAINS}#" "${VVV_PATH_TO_SITE}/provision/vvv-nginx.conf"
