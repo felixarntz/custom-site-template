@@ -74,7 +74,7 @@ done
 for j in "${GIT_PLUGINS[@]}"
 do :
   if [[ ! -d "${VVV_PATH_TO_SITE}/public_html/wp-content/plugins/$j" ]]; then
-    noroot git clone https://github.com:felixarntz/$j.git ${VVV_PATH_TO_SITE}/public_html/wp-content/plugins/$j --quiet
+    noroot git clone git@github.com:felixarntz/$j.git ${VVV_PATH_TO_SITE}/public_html/wp-content/plugins/$j --quiet
   else
     cd ${VVV_PATH_TO_SITE}/public_html/wp-content/plugins/$j
     noroot git pull --quiet
@@ -93,7 +93,7 @@ done
 for l in "${GIT_THEMES[@]}"
 do :
   if [[ ! -d "${VVV_PATH_TO_SITE}/public_html/wp-content/themes/$l" ]]; then
-    noroot git clone https://github.com:felixarntz/$l.git ${VVV_PATH_TO_SITE}/public_html/wp-content/themes/$l --quiet
+    noroot git clone git@github.com:felixarntz/$l.git ${VVV_PATH_TO_SITE}/public_html/wp-content/themes/$l --quiet
   else
     cd ${VVV_PATH_TO_SITE}/public_html/wp-content/themes/$l
     noroot git pull --quiet
