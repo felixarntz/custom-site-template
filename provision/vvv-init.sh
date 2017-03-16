@@ -9,11 +9,11 @@ WP_TYPE=`get_config_value 'wp_type' "single"`
 DB_NAME=`get_config_value 'db_name' "${VVV_SITE_NAME}"`
 DB_NAME=${DB_NAME//[\\\/\.\<\>\:\"\'\|\?\!\*]/}
 
-WP_PLUGINS=`cat ${VVV_CONFIG} | shyaml get-values sites.${SITE_ESCAPED}.custom.wp_plugins 2> /dev/null`
-GIT_PLUGINS=`cat ${VVV_CONFIG} | shyaml get-values sites.${SITE_ESCAPED}.custom.git_plugins 2> /dev/null`
+WP_PLUGINS=(`cat ${VVV_CONFIG} | shyaml get-values sites.${SITE_ESCAPED}.custom.wp_plugins 2> /dev/null`)
+GIT_PLUGINS=(`cat ${VVV_CONFIG} | shyaml get-values sites.${SITE_ESCAPED}.custom.git_plugins 2> /dev/null`)
 
-WP_THEMES=`cat ${VVV_CONFIG} | shyaml get-values sites.${SITE_ESCAPED}.custom.wp_themes 2> /dev/null`
-GIT_THEMES=`cat ${VVV_CONFIG} | shyaml get-values sites.${SITE_ESCAPED}.custom.git_themes 2> /dev/null`
+WP_THEMES=(`cat ${VVV_CONFIG} | shyaml get-values sites.${SITE_ESCAPED}.custom.wp_themes 2> /dev/null`)
+GIT_THEMES=(`cat ${VVV_CONFIG} | shyaml get-values sites.${SITE_ESCAPED}.custom.git_themes 2> /dev/null`)
 
 # Make a database, if we don't already have one
 echo -e "\nCreating database '${DB_NAME}' (if it's not already there)"
