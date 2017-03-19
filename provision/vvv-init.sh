@@ -65,8 +65,10 @@ fi
 for i in "${WP_PLUGINS[@]}"
 do :
   if [[ ! -d "${VVV_PATH_TO_SITE}/public_html/wp-content/plugins/$i" ]]; then
+    echo "Installing plugin $i from wordpress.org..."
     noroot wp plugin install $i --quiet
   else
+    echo "Updating plugin $i from wordpress.org..."
     noroot wp plugin update $i --quiet
   fi
 done
@@ -74,8 +76,10 @@ done
 for j in "${GIT_PLUGINS[@]}"
 do :
   if [[ ! -d "${VVV_PATH_TO_SITE}/public_html/wp-content/plugins/$j" ]]; then
+    echo "Installing plugin $j from github.com..."
     noroot git clone git@github.com:felixarntz/$j.git ${VVV_PATH_TO_SITE}/public_html/wp-content/plugins/$j --quiet
   else
+    echo "Updating plugin $j from github.com..."
     cd ${VVV_PATH_TO_SITE}/public_html/wp-content/plugins/$j
     noroot git pull --quiet
   fi
@@ -84,8 +88,10 @@ done
 for k in "${WP_THEMES[@]}"
 do :
   if [[ ! -d "${VVV_PATH_TO_SITE}/public_html/wp-content/themes/$k" ]]; then
+    echo "Installing theme $k from wordpress.org..."
     noroot wp theme install $k --quiet
   else
+    echo "Updating theme $k from wordpress.org..."
     noroot wp theme update $k --quiet
   fi
 done
@@ -93,8 +99,10 @@ done
 for l in "${GIT_THEMES[@]}"
 do :
   if [[ ! -d "${VVV_PATH_TO_SITE}/public_html/wp-content/themes/$l" ]]; then
+    echo "Installing theme $l from github.com..."
     noroot git clone git@github.com:felixarntz/$l.git ${VVV_PATH_TO_SITE}/public_html/wp-content/themes/$l --quiet
   else
+    echo "Updating theme $l from github.com..."
     cd ${VVV_PATH_TO_SITE}/public_html/wp-content/themes/$l
     noroot git pull --quiet
   fi
